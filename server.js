@@ -9,15 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ================= BREVO SETUP =================
-const apiInstance = new Brevo.TransactionalEmailsApi();
-
-apiInstance.setApiKey(
-  Brevo.TransactionalEmailsApiApiKeys.apiKey,
-  process.env.BREVO_API_KEY
-);
-
-// ================= HOME =================
+// ================== HEALTH CHECK ==================
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -25,7 +17,19 @@ app.get("/", (req, res) => {
   });
 });
 
-// ================= SEND EMAIL =================
+// ================== BREVO SETUP ==================
+const apiInstance = new Brevo.TransactionalEmailsApi();
+
+if (!process.env.BREVO_API_KEY) {
+  console.error("❌ BREVO_API_KEY is missing in environment variables");
+} else {
+  apiInstance.setApiKey(
+    Brevo.TransactionalEmailsApiApiKeys.apiKey,
+    process.env.BREVO_API_KEY
+  );
+}
+
+// ================== SEND EMAIL ==================
 app.post("/send-email", async (req, res) => {
   try {
     const { to, name, subject, html } = req.body;
@@ -33,7 +37,7 @@ app.post("/send-email", async (req, res) => {
     if (!to || !subject || !html) {
       return res.status(400).json({
         success: false,
-        message: "Missing fields"
+        message: "Missing required fields (to, subject, html)"
       });
     }
 
@@ -44,18 +48,27 @@ app.post("/send-email", async (req, res) => {
       email: "noreply@cullomovies.com"
     };
 
-    email.to = [{ email: to, name: name || "" }];
+    email.to = [
+      {
+        email: to,
+        name: name || ""
+      }
+    ];
+
     email.subject = subject;
     email.htmlContent = html;
 
-    await apiInstance.sendTransacEmail(email);
+    const response = await apiInstance.sendTransacEmail(email);
 
     res.json({
       success: true,
-      message: "Email sent successfully"
+      message: "Email sent successfully",
+      data: response
     });
 
   } catch (err) {
+    console.error("EMAIL ERROR:", err.message);
+
     res.status(500).json({
       success: false,
       error: err.message
@@ -63,5 +76,9 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
-// ================= EXPORT FOR VERCEL =================
-export default app;
+// ================== START SERVER ==================
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("🚀 Server running on port", PORT);
+});
