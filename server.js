@@ -32,85 +32,85 @@ function buildEmailTemplate(name) {
 <body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;">
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
-    style="padding:32px 16px;">
+    style="padding:40px 16px;">
     <tr>
       <td align="center">
 
         <!-- Card -->
-        <table role="presentation" width="300" cellpadding="0" cellspacing="0" border="0"
-          style="background-color:#111116;border:1px solid rgba(255,255,255,0.09);border-radius:16px;">
-
-          <!-- Gold top bar -->
+        <table role="presentation" width="520" cellpadding="0" cellspacing="0" border="0"
+          style="background-color:#ffffff;border-radius:12px;border:1px solid #e8eaf0;">
           <tr>
-            <td style="background-color:#e8b44a;height:3px;border-radius:16px 16px 0 0;font-size:0;line-height:0;">&nbsp;</td>
-          </tr>
+            <td style="padding:48px 48px 40px;text-align:center;">
 
-          <!-- Body -->
-          <tr>
-            <td style="padding:28px 24px 24px;text-align:center;">
-
-              <!-- Check icon -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 18px;">
+              <!-- Confetti + icon block (SVG) -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 28px;">
                 <tr>
-                  <td align="center" width="44" height="44"
-                    style="width:44px;height:44px;background-color:#e8b44a;border-radius:50%;vertical-align:middle;">
-                    <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#111116"/>
+                  <td align="center">
+                    <svg width="110" height="110" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+                      <!-- confetti dots -->
+                      <circle cx="22" cy="30" r="4" fill="#a78bfa"/>
+                      <circle cx="88" cy="28" r="3" fill="#60a5fa"/>
+                      <circle cx="18" cy="70" r="3" fill="#34d399"/>
+                      <circle cx="92" cy="72" r="4" fill="#f59e0b"/>
+                      <circle cx="38" cy="16" r="2.5" fill="#f87171"/>
+                      <circle cx="74" cy="14" r="2" fill="#a78bfa"/>
+                      <circle cx="55" cy="96" r="3" fill="#60a5fa"/>
+                      <circle cx="30" cy="88" r="2" fill="#f59e0b"/>
+                      <circle cx="82" cy="88" r="2.5" fill="#f87171"/>
+                      <!-- dashes -->
+                      <rect x="10" y="50" width="10" height="3" rx="1.5" fill="#e8b44a" transform="rotate(-30 10 50)"/>
+                      <rect x="90" y="48" width="10" height="3" rx="1.5" fill="#e8b44a" transform="rotate(30 90 48)"/>
+                      <rect x="50" y="5" width="8" height="2.5" rx="1.25" fill="#f87171" transform="rotate(60 50 5)"/>
+                      <!-- curly lines -->
+                      <path d="M14 42 Q8 48 14 54" stroke="#93c5fd" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                      <path d="M96 42 Q102 48 96 54" stroke="#93c5fd" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                      <!-- green circle -->
+                      <circle cx="55" cy="53" r="26" fill="#4ade80"/>
+                      <circle cx="55" cy="53" r="26" fill="#22c55e"/>
+                      <!-- checkmark -->
+                      <polyline points="43,53 51,61 67,45" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                     </svg>
                   </td>
                 </tr>
               </table>
 
               <!-- Title -->
-              <p style="margin:0 0 3px;font-size:18px;font-weight:700;color:#ffffff;
-                letter-spacing:0.5px;text-transform:uppercase;line-height:1.2;">
-                Account <span style="color:#e8b44a;">Created</span>
-              </p>
-              <p style="margin:0 0 14px;font-size:10px;color:rgba(255,255,255,0.3);
-                letter-spacing:2.5px;text-transform:uppercase;">
-                Successfully
+              <p style="margin:0 0 14px;font-size:22px;font-weight:700;color:#1e2130;line-height:1.3;">
+                Account created successfully!
               </p>
 
               <!-- Body text -->
-              <p style="margin:0 0 20px;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.75;">
-                Hi <span style="color:rgba(255,255,255,0.8);font-weight:600;">${name}</span>,
-                your account is ready.<br/>Start exploring thousands of movies now.
+              <p style="margin:0 0 30px;font-size:15px;color:#6b7280;line-height:1.7;max-width:360px;display:block;">
+                Congratulations <strong style="color:#374151;">${name}</strong>! Your CulloMovies account is ready. Start watching your favourite movies right now.
               </p>
 
-              <!-- CTA -->
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 20px;">
+              <!-- CTA button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
                 <tr>
-                  <td align="center" style="background-color:#e8b44a;border-radius:8px;">
+                  <td align="center" style="background-color:#3b82f6;border-radius:8px;">
                     <a href="https://cullomovies.com" target="_blank"
-                      style="display:inline-block;padding:10px 24px;font-size:12px;
-                      font-weight:700;color:#111116;text-decoration:none;
-                      letter-spacing:0.5px;text-transform:uppercase;">
-                      &#9654;&nbsp; Start Watching
+                      style="display:inline-block;padding:14px 40px;font-size:15px;
+                      font-weight:700;color:#ffffff;text-decoration:none;">
+                      Start Watching
                     </a>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- Brand -->
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;
-                    text-align:center;font-size:11px;letter-spacing:1.5px;
-                    color:rgba(255,255,255,0.22);text-transform:uppercase;">
-                    CULLO<span style="color:#e8b44a;">MOVIES</span>
                   </td>
                 </tr>
               </table>
 
             </td>
           </tr>
-        </table>
 
-        <!-- Footer -->
-        <p style="margin:14px 0 0;font-size:10px;color:#999999;text-align:center;line-height:1.6;">
-          You're receiving this because you signed up on CulloMovies.<br/>
-          &copy; 2025 CulloMovies. All rights reserved.
-        </p>
+          <!-- Footer strip -->
+          <tr>
+            <td style="border-top:1px solid #f0f2f5;padding:18px 48px;text-align:center;">
+              <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;">
+                You received this because you signed up on
+                <a href="https://cullomovies.com" style="color:#e8b44a;text-decoration:none;font-weight:600;">CulloMovies</a>.<br/>
+                &copy; 2025 CulloMovies. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
 
       </td>
     </tr>
