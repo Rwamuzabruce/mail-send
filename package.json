@@ -1,5 +1,5 @@
 {
-  "name": "cullo-email-api",
+  "name": "cullo-register-email",
   "version": "1.0.0",
   "type": "module",
   "main": "server.js",
