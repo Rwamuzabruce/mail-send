@@ -135,7 +135,7 @@ app.post("/register", async (req, res) => {
     const emailData = new Brevo.SendSmtpEmail();
     emailData.sender = { name: "CULLO Movies", email: "noreply@cullomovies.com" };
     emailData.to = [{ email, name }];
-    emailData.subject = "Account Created - CulloMovies 🎬";
+    emailData.subject = "Welcome to CULLO Movies – Your Account is Ready";
     emailData.htmlContent = buildEmailTemplate(name);
 
     await apiInstance.sendTransacEmail(emailData);
