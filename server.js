@@ -9,65 +9,70 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ================== HEALTH CHECK ==================
-app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "CULLO Email API Running 🚀"
-  });
-});
-
-// ================== BREVO SETUP ==================
+// ================= BREVO =================
 const apiInstance = new Brevo.TransactionalEmailsApi();
 
-if (!process.env.BREVO_API_KEY) {
-  console.error("❌ BREVO_API_KEY is missing in environment variables");
-} else {
+if (process.env.BREVO_API_KEY) {
   apiInstance.setApiKey(
     Brevo.TransactionalEmailsApiApiKeys.apiKey,
     process.env.BREVO_API_KEY
   );
+} else {
+  console.error("❌ Missing BREVO_API_KEY");
 }
 
-// ================== SEND EMAIL ==================
-app.post("/send-email", async (req, res) => {
-  try {
-    const { to, name, subject, html } = req.body;
+// ================= HOME =================
+app.get("/", (req, res) => {
+  res.json({ message: "CULLO Register Email Server 🚀" });
+});
 
-    if (!to || !subject || !html) {
+// ================= REGISTER + SEND EMAIL =================
+app.post("/register", async (req, res) => {
+  try {
+    const { name, email } = req.body;
+
+    if (!name || !email) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields (to, subject, html)"
+        message: "Name and email required"
       });
     }
 
-    const email = new Brevo.SendSmtpEmail();
+    // ================= EMAIL TEMPLATE =================
+    const emailData = new Brevo.SendSmtpEmail();
 
-    email.sender = {
+    emailData.sender = {
       name: "CULLO Movies",
       email: "noreply@cullomovies.com"
     };
 
-    email.to = [
-      {
-        email: to,
-        name: name || ""
-      }
-    ];
+    emailData.to = [{ email, name }];
 
-    email.subject = subject;
-    email.htmlContent = html;
+    emailData.subject = "Registration Successful 🎉";
 
-    const response = await apiInstance.sendTransacEmail(email);
+    emailData.htmlContent = `
+      <div style="font-family:Arial;padding:20px;">
+        <h1 style="color:#ff3d3d;">Welcome ${name} 🎬</h1>
+        <p>Your registration is successful.</p>
+        <p>You can now enjoy CULLO Movies.</p>
+
+        <a href="https://cullomovies.com"
+           style="display:inline-block;margin-top:20px;padding:10px 20px;background:#ff3d3d;color:white;text-decoration:none;">
+          Start Watching
+        </a>
+      </div>
+    `;
+
+    // ================= SEND EMAIL =================
+    await apiInstance.sendTransacEmail(emailData);
 
     res.json({
       success: true,
-      message: "Email sent successfully",
-      data: response
+      message: "User registered + email sent"
     });
 
   } catch (err) {
-    console.error("EMAIL ERROR:", err.message);
+    console.error(err);
 
     res.status(500).json({
       success: false,
@@ -76,7 +81,7 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
-// ================== START SERVER ==================
+// ================= START SERVER =================
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
