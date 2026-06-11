@@ -1,207 +1,131 @@
-<!DOCTYPE html>
-<html lang="en">
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import Brevo from "@getbrevo/brevo";
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const apiInstance = new Brevo.TransactionalEmailsApi();
+
+if (process.env.BREVO_API_KEY) {
+  apiInstance.setApiKey(
+    Brevo.TransactionalEmailsApiApiKeys.apiKey,
+    process.env.BREVO_API_KEY
+  );
+} else {
+  console.error("❌ BREVO_API_KEY missing");
+}
+
+function buildEmailTemplate(name) {
+  return `
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - CulloMovies</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 450px;
-            padding: 40px;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo h1 {
-            color: #667eea;
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-        }
-
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            display: block;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            display: block;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Created - CulloMovies</title>
 </head>
-<body>
-    <div class="container">
-        <div class="logo">
-            <h1>🎬 CulloMovies</h1>
-            <p>Create Account</p>
-        </div>
+<body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;">
 
-        <form id="registerForm">
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" id="name" placeholder="Enter your full name" required />
-            </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="padding:40px 16px;">
+    <tr>
+      <td align="center">
 
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="email" placeholder="Enter your email" required />
-            </div>
+        <!-- Card -->
+        <table role="presentation" width="520" cellpadding="0" cellspacing="0" border="0"
+          style="background-color:#ffffff;border-radius:12px;border:1px solid #e8eaf0;">
+          <tr>
+            <td style="padding:48px 48px 36px;text-align:center;">
 
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="password" placeholder="Create a password" required />
-            </div>
+              <!-- Icon -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 28px;">
+                <tr>
+                  <td align="center">
+                    <img src="https://img.icons8.com/ios11/512/40C057/ok.png"
+                      width="90" height="90" alt="Success"
+                      style="display:block;border:0;outline:none;text-decoration:none;" />
+                  </td>
+                </tr>
+              </table>
 
-            <button type="submit" id="submitBtn">Register</button>
-        </form>
+              <!-- Title -->
+              <p style="margin:0 0 14px;font-size:22px;font-weight:700;color:#1e2130;line-height:1.3;">
+                Account created successfully!
+              </p>
 
-        <div id="message" class="message"></div>
-    </div>
+              <!-- Body -->
+              <p style="margin:0 0 30px;font-size:15px;color:#6b7280;line-height:1.7;">
+                Congratulations <strong style="color:#374151;">${name}</strong>! Your CulloMovies account is ready.<br/>
+                Start watching your favourite movies right now.
+              </p>
 
-    <script>
-        const API_URL = 'http://localhost:3000/register';
+              <!-- CTA -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+                <tr>
+                  <td align="center" style="background-color:#3b82f6;border-radius:8px;">
+                    <a href="https://cullomovies.com" target="_blank"
+                      style="display:inline-block;padding:14px 40px;font-size:15px;
+                      font-weight:700;color:#ffffff;text-decoration:none;">
+                      Start Watching
+                    </a>
+                  </td>
+                </tr>
+              </table>
 
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const submitBtn = document.getElementById('submitBtn');
-            const messageDiv = document.getElementById('message');
+            </td>
+          </tr>
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading"></span> Registering...';
+          <!-- Footer -->
+          <tr>
+            <td style="border-top:1px solid #f0f2f5;padding:16px 48px;text-align:center;">
+              <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;">
+                You received this because you signed up on
+                <a href="https://cullomovies.com" style="color:#e8b44a;text-decoration:none;font-weight:600;">CulloMovies</a>.<br/>
+                &copy; 2025 CulloMovies. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
-                });
+      </td>
+    </tr>
+  </table>
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    messageDiv.className = 'message success';
-                    messageDiv.textContent = '✅ ' + data.message;
-                    document.getElementById('registerForm').reset();
-                } else {
-                    messageDiv.className = 'message error';
-                    messageDiv.textContent = '❌ ' + data.message;
-                }
-            } catch (error) {
-                messageDiv.className = 'message error';
-                messageDiv.textContent = '❌ Connection error. Make sure server is running.';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Register';
-            }
-        });
-    </script>
 </body>
-</html>
+</html>`.trim();
+}
+
+app.get("/", (req, res) => {
+  res.json({ success: true, message: "CULLO Register Email Server 🚀" });
+});
+
+app.post("/register", async (req, res) => {
+  try {
+    const { name, email } = req.body;
+
+    if (!name || !email) {
+      return res.status(400).json({ success: false, message: "Name and email required" });
+    }
+
+    const emailData = new Brevo.SendSmtpEmail();
+    emailData.sender = { name: "CULLO Movies", email: "noreply@cullomovies.com" };
+    emailData.to = [{ email, name }];
+    emailData.subject = "Account Created - CulloMovies 🎬";
+    emailData.htmlContent = buildEmailTemplate(name);
+
+    await apiInstance.sendTransacEmail(emailData);
+
+    res.json({ success: true, message: "User registered + email sent" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("🚀 Server running on port", PORT));
